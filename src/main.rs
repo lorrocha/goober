@@ -83,16 +83,6 @@ fn main() {
             }
         }
 
-        if let Some(button) = e.release_args() {
-            match button {
-                Button::Keyboard(Key::Up)    => delta.1 = 0.0,
-                Button::Keyboard(Key::Down)  => delta.1 = 0.0,
-                Button::Keyboard(Key::Left)  => delta.0 = 0.0,
-                Button::Keyboard(Key::Right) => delta.0 = 0.0,
-                _ => ()
-            }
-        }
-
         if let Some(_) = e.update_args() {
             if inputs_submitted && wait_time_elapsed(timestamp) {
                 timestamp = SystemTime::now();
