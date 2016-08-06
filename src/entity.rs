@@ -1,4 +1,7 @@
+extern crate rand;
+
 use {Point, MU, WIDTH, HEIGHT};
+use entity::rand::Rng;
 
 #[derive(Clone)]
 pub struct Entity {
@@ -17,6 +20,20 @@ impl Entity {
             dv: Point(0.0, 0.0),
             width: w,
             height: h,
+        }
+    }
+
+    pub fn random_new() -> Self {
+        let mut rng = rand::thread_rng();
+        let goal_y: f64 = rng.gen_range(0.0, 450.0);
+        let goal_x: f64 = rng.gen_range(0.0, 600.0);
+
+        Entity {
+            pos: Point(goal_x, goal_y),
+            color: [0.1, 0.7, 0.1, 0.4],
+            dv: Point(0.0, 0.0),
+            width: 40.0,
+            height: 40.0,
         }
     }
 

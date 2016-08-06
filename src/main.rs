@@ -14,11 +14,9 @@ const HEIGHT: u32 = 480;
 
 fn main() {
     let title = "Goober";
-    let mut i = 0;
-    let mut squares = [
-        Entity::new(Point(0.0, 0.0), [0.3, 0.0, 0.7, 0.5], 25.0, 25.0),
-        Entity::new(Point(100.0, 100.0), [0.7, 0.0, 0.3, 0.5], 25.0, 25.0),
-    ];
+    let mut arrows = Entity::new(Point(630.0, 480.0), [0.3, 0.0, 0.7, 0.5], 25.0, 25.0);
+    let mut wasd = Entity::new(Point(0.0, 0.0), [0.7, 0.0, 0.3, 0.5], 25.0, 25.0);
+    let goal_block = Entity::random_new();
 
     let mut window: PistonWindow = WindowSettings::new(title, [WIDTH, HEIGHT])
         .exit_on_esc(true)
@@ -34,13 +32,13 @@ fn main() {
         if let Some(_) = e.render_args() {
             window.draw_2d(&e, |c, g| {
                 clear([0.0, 0.0, 0.0, 1.0], g);
-                for sq in &squares {
-                    rectangle(sq.color, sq.geometry(), c.transform, g);
-                }
+                rectangle(arrows.color, arrows.geometry(), c.transform, g);
+                rectangle(wasd.color, wasd.geometry(), c.transform, g);
+                rectangle(goal_block.color, goal_block.geometry(), c.transform, g);
 
                 let transform = c.transform.trans(40.0, 40.0);
                 text::Text::new_color([0.0, 1.0, 0.0, 1.0], 32).draw(
-                    "Hello World!",
+                    "Race to the DEATH",
                     &mut glyphs,
                     &c.draw_state,
                     transform, g
@@ -50,17 +48,21 @@ fn main() {
 
         if let Some(button) = e.press_args() {
             match button {
-                Button::Keyboard(Key::Up)    => squares[i].adjust_dy(-1.0),
-                Button::Keyboard(Key::Down)  => squares[i].adjust_dy(1.0),
-                Button::Keyboard(Key::Left)  => squares[i].adjust_dx(-1.0),
-                Button::Keyboard(Key::Right) => squares[i].adjust_dx(1.0),
-                Button::Keyboard(Key::Space) => if i == squares.len() - 1 { i = 0 } else { i += 1 },
+                Button::Keyboard(Key::Up)    => arrows.adjust_dy(-1.0),
+                Button::Keyboard(Key::Down)  => arrows.adjust_dy(1.0),
+                Button::Keyboard(Key::Left)  => arrows.adjust_dx(-1.0),
+                Button::Keyboard(Key::Right) => arrows.adjust_dx(1.0),
+                Button::Keyboard(Key::W)     => wasd.adjust_dy(-1.0),
+                Button::Keyboard(Key::S)     => wasd.adjust_dy(1.0),
+                Button::Keyboard(Key::A)     => wasd.adjust_dx(-1.0),
+                Button::Keyboard(Key::D)     => wasd.adjust_dx(1.0),
                 _ => ()
             }
         }
 
         if let Some(_) = e.update_args() {
-            squares[i].nudge();
+            arrows.nudge();
+            wasd.nudge();
         }
     }
 }
