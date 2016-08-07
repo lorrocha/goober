@@ -37,6 +37,30 @@ impl Entity {
         }
     }
 
+    pub fn overlapping(&self, other: &Entity) -> bool {
+        let self_left = self.pos.0;
+        let self_right = self_left + self.width;
+        let other_left = other.pos.0;
+        let other_right = other_left + other.width;
+
+        if (self_left < other_left && other_left < self_right) &&
+           (self_left < other_right && other_right < self_right) {
+            let self_top = self.pos.1;
+            let self_bottom = self_top + self.height;
+            let other_top = other.pos.1;
+            let other_bottom = other_top + other.height;
+
+            if (self_top < other_top && other_top < self_bottom) &&
+               (self_top < other_bottom && other_bottom < self_bottom) {
+                true
+            } else {
+                false
+            }
+        } else {
+            false
+        }
+    }
+
     pub fn geometry(&self) -> [f64; 4] {
         [self.pos.0, self.pos.1, self.width, self.height]
     }
